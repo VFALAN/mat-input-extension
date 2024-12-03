@@ -1,5 +1,6 @@
 /* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
 /* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
+// "./dist/mat-input-file"
 {
   "compileOnSave": false,
   "compilerOptions": {
@@ -8,6 +9,14 @@
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
+    "paths": {
+      "mat-input-file": [
+        "./projects/mat-input-file/src/public-api.ts"
+      ],
+      "mat-input-number": [
+        "./projects/mat-input-number/src/public-api.ts"
+      ]
+    },
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
