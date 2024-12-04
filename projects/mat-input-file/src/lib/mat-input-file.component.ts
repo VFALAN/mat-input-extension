@@ -1,7 +1,7 @@
-import {Component, ElementRef, HostBinding, Input, OnDestroy, Optional, Self, ViewChild} from '@angular/core';
-import {MatInput, MatInputModule} from "@angular/material/input";
+import {Component, ElementRef, HostBinding, Inject, Input, OnDestroy, Optional, Self, ViewChild} from '@angular/core';
+import {MatFormField, MatInput, MatInputModule} from "@angular/material/input";
 import {ControlValueAccessor, NgControl} from "@angular/forms";
-import {MatFormFieldControl, MatFormFieldModule} from "@angular/material/form-field";
+import {MAT_FORM_FIELD, MatFormFieldControl, MatFormFieldModule} from "@angular/material/form-field";
 import {Subject} from "rxjs";
 import {MatIconModule} from "@angular/material/icon";
 import {CommonModule} from "@angular/common";
@@ -23,27 +23,27 @@ import {MatIconButton} from "@angular/material/button";
   template: `
 
 
-      <input #fileName
-             disabled="true"
-             type="text"
-             placeholder="select a file"
-             class="mat-input-file"
-             (click)="focused=true;" [value]="_value?.name"
-             matInput
-      >
+    <input #fileName
+           disabled="true"
+           type="text"
+           placeholder="select a file"
+           class="mat-input-file"
+           [value]="_value?.name"
+           matInput
+    >
 
-      <div class="button-container">
-        @if (_value?.name !== null) {
-          <button class="suffix-button" mat-icon-button (click)="value=null;empty=true" matSuffix>
-            <mat-icon>close</mat-icon>
-          </button>
+    <div class="button-container">
+      @if (_value?.name !== null) {
+        <button class="suffix-button" mat-icon-button (click)="value=null;empty=true" matSuffix>
+          <mat-icon>close</mat-icon>
+        </button>
 
-        } @else {
-          <button class="suffix-button" mat-icon-button matSuffix (click)="fileInput.click()">
-            <mat-icon>attach_file</mat-icon>
-          </button>
-        }
-      </div>
+      } @else {
+        <button class="suffix-button" mat-icon-button matSuffix (click)="fileInput.click();this.focused=true">
+          <mat-icon>attach_file</mat-icon>
+        </button>
+      }
+    </div>
     <input #fileInput hidden type="file" (change)="fileSelected(fileInput.files)">
   `,
   styles: `
@@ -59,7 +59,8 @@ import {MatIconButton} from "@angular/material/button";
     .suffix-button {
       display: inline-block !important;
     }
-    .button-container{
+
+    .button-container {
       position: absolute;
       top: 50%;
       right: 10%;
@@ -79,6 +80,9 @@ export class MatInputFileComponent implements OnDestroy, ControlValueAccessor, M
   _value!: File | null;
   set value(value: File | null) {
     this._value = value;
+    this.onTouched()
+    this.onChange(value);
+
     this.stateChanges.next();
   }
 
@@ -100,13 +104,23 @@ export class MatInputFileComponent implements OnDestroy, ControlValueAccessor, M
 
 
   writeValue(obj: any): void {
+    console.log('writing value')
     this.value = obj;
     this.stateChanges.next();
   }
 
-  fileSelected(file: any | null): void {
-    this._value = file[0];
-    this._empty = false
+  fileSelected(file: FileList | null): void {
+    if (file !== null) {
+      this.value = file[0];
+      this.empty = false;
+      this.writeValue(this.value)
+    } else {
+      this.empty = true;
+      this.value = null;
+      this.writeValue(null);
+    }
+
+
     this.stateChanges.next();
   }
 
@@ -197,7 +211,7 @@ export class MatInputFileComponent implements OnDestroy, ControlValueAccessor, M
     controlElement.setAttribute('aria-describedby', ids.join(' '));
   }
 
-  onChange = (value: File | undefined) => {
+  onChange = (value: File | null) => {
   }
   onTouched = () => {
   };
@@ -205,7 +219,7 @@ export class MatInputFileComponent implements OnDestroy, ControlValueAccessor, M
 
   @HostBinding('class.floating')
   get shouldLabelFloat() {
-    console.log('should float', this.focused, !this.empty)
+    // console.log('should float', this.focused, !this.empty)
     return this.focused || !this.empty;
   }
 
@@ -217,7 +231,8 @@ export class MatInputFileComponent implements OnDestroy, ControlValueAccessor, M
     this.stateChanges.complete();
   }
 
-  constructor(@Optional() @Self() public ngControl: NgControl) {
+  constructor(@Optional() @Self() public ngControl: NgControl,
+              @Optional() @Inject(MAT_FORM_FIELD) public _formField: MatFormField) {
     if (this.ngControl != null) {
       this.ngControl.valueAccessor = this;
     }
