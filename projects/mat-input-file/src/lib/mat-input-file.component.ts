@@ -1,12 +1,12 @@
 import {Component, ElementRef, HostBinding, Input, OnDestroy, Optional, Self, ViewChild} from '@angular/core';
 import {MatInput, MatInputModule} from "@angular/material/input";
 import {ControlValueAccessor, NgControl} from "@angular/forms";
-import {MatFormFieldControl} from "@angular/material/form-field";
+import {MatFormFieldControl, MatFormFieldModule} from "@angular/material/form-field";
 import {Subject} from "rxjs";
 import {MatIconModule} from "@angular/material/icon";
-import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {CommonModule} from "@angular/common";
-import {BrowserModule} from "@angular/platform-browser";
+import {BooleanInput, coerceBooleanProperty} from "@angular/cdk/coercion";
+import {MatIconButton} from "@angular/material/button";
 
 
 @Component({
@@ -16,11 +16,34 @@ import {BrowserModule} from "@angular/platform-browser";
   imports: [
     MatInputModule,
     MatIconModule,
-    CommonModule
+    MatFormFieldModule,
+    CommonModule,
+    MatIconButton
   ],
   template: `
-    <input #fileName type="text" (click)="fileInput.click()" [value]="_value?.name" matInput>
-    <mat-icon matSuffix>file</mat-icon>
+
+
+      <input #fileName
+             disabled="true"
+             type="text"
+             placeholder="select a file"
+             class="mat-input-file"
+             (click)="focused=true;" [value]="_value?.name"
+             matInput
+      >
+
+      <div class="button-container">
+        @if (_value?.name !== null) {
+          <button class="suffix-button" mat-icon-button (click)="value=null;empty=true" matSuffix>
+            <mat-icon>close</mat-icon>
+          </button>
+
+        } @else {
+          <button class="suffix-button" mat-icon-button matSuffix (click)="fileInput.click()">
+            <mat-icon>attach_file</mat-icon>
+          </button>
+        }
+      </div>
     <input #fileInput hidden type="file" (change)="fileSelected(fileInput.files)">
   `,
   styles: `
@@ -32,14 +55,24 @@ import {BrowserModule} from "@angular/platform-browser";
     :host.floating span {
       opacity: 1;
     }
+
+    .suffix-button {
+      display: inline-block !important;
+    }
+    .button-container{
+      position: absolute;
+      top: 50%;
+      right: 10%;
+      transform: translateY(-50%);
+    }
   `
 })
 export class MatInputFileComponent implements OnDestroy, ControlValueAccessor, MatFormFieldControl<File> {
   static nextId = 0;
   @ViewChild(MatInput, {read: ElementRef, static: true})
   input!: ElementRef;
-@ViewChild('fileName')
-fileName!: ElementRef;
+  @ViewChild('fileName')
+  fileName!: ElementRef;
   @HostBinding()
   id: string = `mat-file-input-${MatInputFileComponent.nextId++}`
   //value
@@ -73,6 +106,7 @@ fileName!: ElementRef;
 
   fileSelected(file: any | null): void {
     this._value = file[0];
+    this._empty = false
     this.stateChanges.next();
   }
 
@@ -87,7 +121,7 @@ fileName!: ElementRef;
     return this._autofilled;
   }
 
-  readonly controlType!: string | undefined;
+  controlType: string | undefined = 'mat-input-file';
   _disabled: boolean = false;
   @Input()
   set disabled(value: boolean) {
@@ -113,11 +147,13 @@ fileName!: ElementRef;
   focused: boolean = false;
 
   onFocusIn(event: FocusEvent) {
+    console.log('on focus', event);
     this.focused = true;
     this.stateChanges.next();
   }
 
   OnFocusOut(event: FocusEvent) {
+    console.log('out focus', event);
     if (this.input.nativeElement.contains(event.relatedTarget)) {
       this.focused = true;
       this.onTouched();
@@ -126,6 +162,13 @@ fileName!: ElementRef;
 
 
   onContainerClick(event: MouseEvent): void {
+    console.log('onContainerClick in mat-file input', event);
+    if ((event.target as Element).tagName.toLowerCase() === 'input') {
+      console.log('setting float')
+      this.stateChanges.next();
+      this.focused = true
+    }
+    this.focused = false;
   }
 
   private _placeholder!: string;
@@ -140,8 +183,8 @@ fileName!: ElementRef;
 
   private _required: boolean = false;
   @Input()
-  set required(value: boolean) {
-    this._required = value;
+  set required(value: BooleanInput) {
+    this._required = coerceBooleanProperty(value);
     this.stateChanges.next();
   }
 
@@ -150,6 +193,8 @@ fileName!: ElementRef;
   }
 
   setDescribedByIds(ids: string[]): void {
+    const controlElement = this.input.nativeElement
+    controlElement.setAttribute('aria-describedby', ids.join(' '));
   }
 
   onChange = (value: File | undefined) => {
@@ -160,11 +205,13 @@ fileName!: ElementRef;
 
   @HostBinding('class.floating')
   get shouldLabelFloat() {
+    console.log('should float', this.focused, !this.empty)
     return this.focused || !this.empty;
   }
 
-  readonly stateChanges = new Subject<void>();
-  readonly userAriaDescribedBy!: string;
+  stateChanges = new Subject<void>();
+
+  @Input('aria-describedby') userAriaDescribedBy!: string;
 
   ngOnDestroy(): void {
     this.stateChanges.complete();
