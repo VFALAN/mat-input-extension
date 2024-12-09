@@ -4,6 +4,11 @@
     <mat-label>File</mat-label>
     <mat-input-file formControlName="file">
     </mat-input-file>
+    @if (form.controls['file'].hasError('required')) {
+      <mat-error>
+        File Its Required
+      </mat-error>
+    }
   </mat-form-field>
   <mat-form-field>
     <mat-label>comparation</mat-label>

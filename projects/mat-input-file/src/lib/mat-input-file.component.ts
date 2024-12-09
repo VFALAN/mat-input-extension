@@ -86,6 +86,8 @@ export class MatInputFileComponent implements OnDestroy, ControlValueAccessor, M
     this.stateChanges.next();
   }
 
+  _touched: boolean = false;
+
   get value(): File | null {
     return this._value;
   }
@@ -104,7 +106,7 @@ export class MatInputFileComponent implements OnDestroy, ControlValueAccessor, M
 
 
   writeValue(obj: any): void {
-    console.log('writing value')
+
     this.value = obj;
     this.stateChanges.next();
   }
@@ -157,17 +159,21 @@ export class MatInputFileComponent implements OnDestroy, ControlValueAccessor, M
   }
 
   _empty: boolean = true;
-  readonly errorState!: boolean;
+
+  get errorState(): boolean {
+    return this._value === null && this._touched;
+  }
+
   focused: boolean = false;
 
   onFocusIn(event: FocusEvent) {
-    console.log('on focus', event);
+
     this.focused = true;
     this.stateChanges.next();
   }
 
   OnFocusOut(event: FocusEvent) {
-    console.log('out focus', event);
+
     if (this.input.nativeElement.contains(event.relatedTarget)) {
       this.focused = true;
       this.onTouched();
@@ -176,9 +182,10 @@ export class MatInputFileComponent implements OnDestroy, ControlValueAccessor, M
 
 
   onContainerClick(event: MouseEvent): void {
-    console.log('onContainerClick in mat-file input', event);
+
+    this._touched = true;
     if ((event.target as Element).tagName.toLowerCase() === 'input') {
-      console.log('setting float')
+
       this.stateChanges.next();
       this.focused = true
     }
@@ -219,7 +226,7 @@ export class MatInputFileComponent implements OnDestroy, ControlValueAccessor, M
 
   @HostBinding('class.floating')
   get shouldLabelFloat() {
-    // console.log('should float', this.focused, !this.empty)
+
     return this.focused || !this.empty;
   }
 
@@ -232,7 +239,8 @@ export class MatInputFileComponent implements OnDestroy, ControlValueAccessor, M
   }
 
   constructor(@Optional() @Self() public ngControl: NgControl,
-              @Optional() @Inject(MAT_FORM_FIELD) public _formField: MatFormField) {
+              @Optional() @Inject(MAT_FORM_FIELD) public _formField: MatFormField
+  ) {
     if (this.ngControl != null) {
       this.ngControl.valueAccessor = this;
     }

@@ -16,7 +16,13 @@ import {MatButton} from "@angular/material/button";
     MatInputModule,
     MatIconModule,
     MatFormFieldModule,
-    MatInputFileComponent, MatInputModule, CommonModule, MatIcon, ReactiveFormsModule, MatButton],
+    MatInputFileComponent,
+    MatInputModule,
+    CommonModule,
+    MatIcon,
+    ReactiveFormsModule,
+    MatButton
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
