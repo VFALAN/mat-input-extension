@@ -14,8 +14,7 @@
         "./dist/avf/mat-input-file"
       ],
       "mat-input-extension": [
-        "./dist/mat-input-extension",
-        "./dist/mat-input-extension"
+        "./projects/mat-input-extension/src/lib/module.ts",
       ],
       "mat-input-file": [
         "./projects/mat-input-file/src/public-api.ts"

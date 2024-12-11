@@ -1,22 +1,19 @@
 import {Component, inject} from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import {MatInputFileComponent} from "mat-input-file";
 import {MatInputModule} from "@angular/material/input";
 import {CommonModule} from "@angular/common";
-import {BrowserModule} from "@angular/platform-browser";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatIcon, MatIconModule} from "@angular/material/icon";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatButton} from "@angular/material/button";
+import {MatInputExtensionModule} from "mat-input-extension";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet,
-    MatInputModule,
+  imports: [MatInputModule,
     MatIconModule,
     MatFormFieldModule,
-    MatInputFileComponent,
+    MatInputExtensionModule,
     MatInputModule,
     CommonModule,
     MatIcon,
@@ -33,7 +30,7 @@ export class AppComponent {
 
   constructor() {
     this.form = this.formBuilder.group({
-      file : [null, [Validators.required]],
+      file: [null, [Validators.required]],
     })
   }
 

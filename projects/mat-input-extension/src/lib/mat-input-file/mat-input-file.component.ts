@@ -1,14 +1,65 @@
 import {Component, ElementRef, HostBinding, Inject, Input, OnDestroy, Optional, Self, ViewChild} from '@angular/core';
 import {ControlValueAccessor, NgControl} from "@angular/forms";
-import {MAT_FORM_FIELD, MatFormFieldControl} from "@angular/material/form-field";
-import {MatFormField, MatInput} from "@angular/material/input";
+import {MAT_FORM_FIELD, MatFormFieldControl, MatFormFieldModule} from "@angular/material/form-field";
+import {MatFormField, MatInput, MatInputModule} from "@angular/material/input";
 import {BooleanInput, coerceBooleanProperty} from "@angular/cdk/coercion";
 import {Subject} from "rxjs";
+import {MatIconModule} from "@angular/material/icon";
+import {CommonModule} from "@angular/common";
+import {MatIconButton} from "@angular/material/button";
 
 @Component({
-  selector: 'lib-mat-input-file',
-  templateUrl: './mat-input-file.component.html',
-  styleUrl: './mat-input-file.component.css'
+  selector: 'mat-input-file',
+  standalone: false,
+  providers: [{provide: MatFormFieldControl, useExisting: MatInputFileComponent}],
+
+  template: `
+
+
+    <input #fileName
+           disabled="true"
+           type="text"
+           placeholder="select a file"
+           class="mat-input-file"
+           [value]="_value?.name"
+           matInput
+    >
+
+    <div class="button-container">
+      @if (_value?.name !== null) {
+        <button class="suffix-button" mat-icon-button (click)="value=null;empty=true" matSuffix>
+          <mat-icon>close</mat-icon>
+        </button>
+
+      } @else {
+        <button class="suffix-button" mat-icon-button matSuffix (click)="fileInput.click();this.focused=true">
+          <mat-icon>attach_file</mat-icon>
+        </button>
+      }
+    </div>
+    <input #fileInput hidden type="file" (change)="fileSelected(fileInput.files)">
+  `,
+  styles: `
+    span {
+      opacity: 0;
+      transition: opacity 200ms;
+    }
+
+    :host.floating span {
+      opacity: 1;
+    }
+
+    .suffix-button {
+      display: inline-block !important;
+    }
+
+    .button-container {
+      position: absolute;
+      top: 50%;
+      right: 10%;
+      transform: translateY(-50%);
+    }
+  `
 })
 export class MatInputFileComponent implements OnDestroy, ControlValueAccessor, MatFormFieldControl<File> {
   static nextId = 0;
