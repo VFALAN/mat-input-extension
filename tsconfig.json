@@ -10,6 +10,13 @@
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
     "paths": {
+      "@avf/mat-input-file": [
+        "./dist/avf/mat-input-file"
+      ],
+      "mat-input-extension": [
+        "./dist/mat-input-extension",
+        "./dist/mat-input-extension"
+      ],
       "mat-input-file": [
         "./projects/mat-input-file/src/public-api.ts"
       ],
