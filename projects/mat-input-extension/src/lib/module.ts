@@ -6,13 +6,15 @@ import {MatInput, MatSuffix} from "@angular/material/input";
 import {MatIconButton} from "@angular/material/button";
 import {CommonModule} from "@angular/common";
 import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatInputNumberComponent} from "./mat-input-number/mat-input-number.component";
 
 
 
 @NgModule({
   declarations: [
     MatInputExtensionComponent,
-    MatInputFileComponent
+    MatInputFileComponent,
+    MatInputNumberComponent
   ],
   imports: [
     MatIcon,
@@ -29,7 +31,8 @@ import {MatFormFieldModule} from "@angular/material/form-field";
     MatInput,
     MatIconButton,
     MatSuffix,
-    CommonModule
+    CommonModule,
+    MatInputNumberComponent
   ]
 })
 export class MatInputExtensionModule { }

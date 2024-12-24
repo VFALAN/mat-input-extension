@@ -15,7 +15,15 @@
     <mat-icon aria-hidden="false" matSuffix aria-label="Example home icon" fontIcon="home"></mat-icon>
     <input type="text" matInput>
   </mat-form-field>
+  <mat-form-field>
+    <mat-label>number comparation</mat-label>
+    <input type="number" matInput>
+  </mat-form-field>
+
+  <mat-input-number formControlName="number"></mat-input-number>
+
 
   <button mat-raised-button color="primary" [disabled]="form.invalid"> Ok</button>
   <button mat-raised-button color="accent" (click)="console.log(form.getRawValue())">Show</button>
+
 </form>

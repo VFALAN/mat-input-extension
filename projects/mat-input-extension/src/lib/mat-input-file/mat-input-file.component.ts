@@ -1,12 +1,9 @@
 import {Component, ElementRef, HostBinding, Inject, Input, OnDestroy, Optional, Self, ViewChild} from '@angular/core';
 import {ControlValueAccessor, NgControl} from "@angular/forms";
-import {MAT_FORM_FIELD, MatFormFieldControl, MatFormFieldModule} from "@angular/material/form-field";
-import {MatFormField, MatInput, MatInputModule} from "@angular/material/input";
+import {MAT_FORM_FIELD, MatFormFieldControl} from "@angular/material/form-field";
+import {MatFormField, MatInput} from "@angular/material/input";
 import {BooleanInput, coerceBooleanProperty} from "@angular/cdk/coercion";
 import {Subject} from "rxjs";
-import {MatIconModule} from "@angular/material/icon";
-import {CommonModule} from "@angular/common";
-import {MatIconButton} from "@angular/material/button";
 
 @Component({
   selector: 'mat-input-file',

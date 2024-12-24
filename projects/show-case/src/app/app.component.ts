@@ -31,6 +31,7 @@ export class AppComponent {
   constructor() {
     this.form = this.formBuilder.group({
       file: [null, [Validators.required]],
+      number: [null, [Validators.required]],
     })
   }
 
