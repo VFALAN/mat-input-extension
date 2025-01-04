@@ -17,16 +17,14 @@
   </mat-form-field>
 
 
-
-
   <mat-form-field>
     <mat-label>number comparation</mat-label>
     <input type="number" matInput>
   </mat-form-field>
 
-<!--  <mat-input-number formControlName="number"></mat-input-number>-->
+  <!--  <mat-input-number formControlName="number"></mat-input-number>-->
 
-  <mat-picture-input>
+  <mat-picture-input formControlName="picture">
 
   </mat-picture-input>
   <button mat-raised-button color="primary" [disabled]="form.invalid"> Ok</button>
