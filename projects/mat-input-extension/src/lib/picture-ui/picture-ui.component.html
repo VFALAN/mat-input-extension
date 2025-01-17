@@ -1,9 +1,10 @@
 <h2 mat-dialog-title>Take Picture</h2>
 <mat-dialog-content>
   <div class="video-container">
-    <video id="video" [width]="WIDTH" [height]="HEIGHT" [class.show]="!isCaptured" [class.hide]="isCaptured" #video
+    <video id="video" [class.show]="!isCaptured" [class.hide]="isCaptured"
+           #video
            autoplay></video>
-    <canvas is="canvas" [width]="WIDTH" [height]="HEIGHT" [class.show]="isCaptured" [class.hide]="!isCaptured"
+    <canvas id="canvas" [class.show]="isCaptured" [class.hide]="!isCaptured"
             #canvas></canvas>
   </div>
 
@@ -12,7 +13,8 @@
   @if (!isCaptured) {
     <button mat-raised-button color="primary" (click)="capture()">take</button>
   } @else {
-    <button mat-raised-button color="primary" (click)="save()">save</button>
+    <button mat-raised-button color="primary" (click)="isCaptured=false">Toke Other</button>
+    <button mat-raised-button color="secondary" (click)="save()">save</button>
   }
 
   <button mat-raised-button (click)="cancel()">cancel</button>

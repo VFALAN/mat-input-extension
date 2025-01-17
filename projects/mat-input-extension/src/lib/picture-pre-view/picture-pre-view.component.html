@@ -1,0 +1,11 @@
+<mat-card-content>
+  @if (source !== undefined) {
+    <img [src]="source" alt="preview iamge">
+
+  }
+</mat-card-content>
+<mat-card-actions>
+  <button (click)="cancel()" mat-icon-button>Close
+    <mat-icon>close</mat-icon>
+  </button>
+</mat-card-actions>

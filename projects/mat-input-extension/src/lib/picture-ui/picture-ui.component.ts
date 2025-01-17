@@ -8,6 +8,12 @@ import {
 } from "@angular/material/dialog";
 import {MatButton} from "@angular/material/button";
 import e from "express";
+import {BreakpointObserver} from "@angular/cdk/layout";
+
+export interface screenCase {
+  minWidth: number;
+  maxWidth: number;
+}
 
 @Component({
   selector: 'lib-picture-ui',
@@ -21,11 +27,23 @@ import e from "express";
   templateUrl: './picture-ui.component.html',
   styleUrl: './picture-ui.component.css'
 })
+
 export class PictureUiComponent implements OnInit, OnDestroy {
   readonly dialog = inject(MatDialogRef<PictureUiComponent>);
   isCaptured: boolean = false;
-  WIDTH = 640;
-  HEIGHT = 480;
+  readonly smallScreen: screenCase = {
+    minWidth: 0,
+    maxWidth: 374
+  }
+  readonly mediumScreen: screenCase = {
+    minWidth: 375,
+    maxWidth: 799
+  }
+  readonly largeScreen: screenCase = {
+    minWidth: 800,
+    maxWidth: 1200
+  }
+  width: number = 280;
 
   @ViewChild("video", {static: true})
   public video!: ElementRef;
@@ -56,42 +74,46 @@ export class PictureUiComponent implements OnInit, OnDestroy {
     this.isCaptured = true;
   }
 
-  writePhoto(idx: number) {
-    this.isCaptured = true;
-    const image = new Image();
-    image.src = this.captures[idx];
-    this.drawImageToCanvas(image);
-  }
 
   private drawImageToCanvas(image: HTMLImageElement) {
-    this.canvas.nativeElement.getContext("2d").drawImage(image, 0, 0, this.WIDTH, this.HEIGHT);
+    const height = this.video.nativeElement.clientHeight;
+    const width = this.video.nativeElement.clientWidth;
+    console.log(height, width)
+    console.log(image.src)
+    this.canvas.nativeElement.width = width;
+    this.canvas.nativeElement.height = height;
+    this.canvas.nativeElement.getContext("2d").drawImage(image, 0, 0, width, height);
+
   }
 
   cancel() {
-    this.dialog.close();
+    this.dialog.close(null);
   }
 
   ngOnInit(): void {
-    this.setupDevices();
+    this.setupDevices().then();
   }
 
   ngOnDestroy(): void {
-    console.log('closing component')
+
     this.stream.getTracks().forEach(track => {
-      console.log('stopping track', {track});
-      track.stop()
+
+      track.stop();
     })
   }
 
+  tempdata!: any;
+
   save() {
     const data = this.canvas.nativeElement.toDataURL('image/png');
-    console.log({data});
+    this.tempdata = data;
     const blob = new Blob([data.replace(/^data:image\/\w+;base64,/, '')], {type: 'image/png'});
     this.file = new File([blob], 'picture', {type: 'image/png'});
-    this.dialog.close(this.file);
+
+    this.dialog.close(data);
   }
 
-  constructor() {
+  constructor(private readonly breakPointObserver: BreakpointObserver) {
   }
 
 

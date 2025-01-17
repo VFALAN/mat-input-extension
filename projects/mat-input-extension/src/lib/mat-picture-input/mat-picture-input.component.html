@@ -1,2 +1,29 @@
-<input type="text" matInput>
-<button (click)="openDialog()">take picture</button>
+<input type="text" disabled [value]="value!=null ? value.name : ''" matInput>
+<div suffix-button-container>
+  @if (value !== null) {
+    <button mat-icon-button (click)="clear()">
+      <mat-icon>close</mat-icon>
+    </button>
+    @if (enabledPreview) {
+      <button mat-icon-button (click)="preview()">
+        <mat-icon>
+          visibility
+        </mat-icon>
+      </button>
+    }
+
+    @if (enabledDownload) {
+      <button (click)="download()" mat-icon-button>
+        <mat-icon>
+          download
+        </mat-icon>
+      </button>
+    }
+
+  } @else {
+    <button mat-icon-button (click)="openDialogPictureUI()">
+      <mat-icon>camera</mat-icon>
+    </button>
+  }
+</div>
+
