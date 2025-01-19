@@ -11,6 +11,7 @@ import {MatPictureInputComponent} from "./mat-picture-input/mat-picture-input.co
 import {SuffixInputButtonDirective} from "./suffix-input-button.directive";
 import {PicturePreViewComponent} from "./picture-pre-view/picture-pre-view.component";
 import {MatCardActions, MatCardContent} from "@angular/material/card";
+import {provideHttpClient} from "@angular/common/http";
 
 
 @NgModule({
@@ -21,6 +22,7 @@ import {MatCardActions, MatCardContent} from "@angular/material/card";
     MatPictureInputComponent,
     SuffixInputButtonDirective
   ],
+  providers: [provideHttpClient()],
   imports: [
     MatIcon,
     MatInput,

@@ -13,11 +13,12 @@ import {
 import {MatDialog} from "@angular/material/dialog";
 import {PictureUiComponent} from "../picture-ui/picture-ui.component";
 import {ControlValueAccessor, NgControl} from "@angular/forms";
-import {Subject} from "rxjs";
+import {map, Observable, Subject} from "rxjs";
 import {MatFormField, MatInput} from "@angular/material/input";
 import {BooleanInput, coerceBooleanProperty} from "@angular/cdk/coercion";
 import {MAT_FORM_FIELD, MatFormFieldControl} from "@angular/material/form-field";
 import {PicturePreViewComponent} from "../picture-pre-view/picture-pre-view.component";
+import {HttpClient} from "@angular/common/http";
 
 @Component({
   selector: 'mat-picture-input',
@@ -36,6 +37,7 @@ import {PicturePreViewComponent} from "../picture-pre-view/picture-pre-view.comp
   `
 })
 export class MatPictureInputComponent implements OnInit, ControlValueAccessor {
+  http: HttpClient = inject(HttpClient);
   @Input()
   enabledPreview: boolean = false;
   @Input()
@@ -48,6 +50,7 @@ export class MatPictureInputComponent implements OnInit, ControlValueAccessor {
   @HostBinding()
   id: string = `mat-picture-input-${MatPictureInputComponent.nextId++}`
   private preViewData!: string;
+  fileName: string = '';
 
   get value() {
     return this._value;
@@ -166,7 +169,7 @@ export class MatPictureInputComponent implements OnInit, ControlValueAccessor {
   }
 
   stateChanges = new Subject<void>();
-  _onChange = (value: File | null) => {
+  _onChange = (value: File | string | null) => {
   }
   _onTouched = () => {
   };
@@ -183,6 +186,26 @@ export class MatPictureInputComponent implements OnInit, ControlValueAccessor {
 
   }
 
+  getFileFromUrl(url: string): Observable<File> {
+    const fileName = this.getFileName(url);
+
+    return this.http.get(url, {responseType: 'blob'}).pipe(map((data: Blob) => {
+      return new File([data],fileName, {type: 'image/png'});
+    }))
+
+  }
+
+  private getFileName(urlOrigin: string): string {
+    const parts = urlOrigin.split('/');
+    return parts.length > 0 ? parts[parts.length - 1] : 'picture.png';
+  }
+
+  // getPicture() {
+  //   if (this.value) {
+  //     return this.value;
+  //   } else {
+  //   }
+  // }
 
   openDialogPictureUI() {
     const dialogRef = this.dialog.open(PictureUiComponent);
@@ -195,6 +218,7 @@ export class MatPictureInputComponent implements OnInit, ControlValueAccessor {
       }
       const byteArray = new Uint8Array(byteNumbers);
       const file = new File([byteArray], 'picture.png', {type: 'image/png'});
+      this.fileName = file.name;
       this.writeValue(file);
     })
   }
@@ -208,11 +232,23 @@ export class MatPictureInputComponent implements OnInit, ControlValueAccessor {
     this._onTouched = fn;
   }
 
-  writeValue(obj: File): void {
-    this._value = obj;
+  writeValue(obj: File | string): void {
+    let file: File;
+    console.log(`the value written its : ${obj}`)
+    if (typeof obj === 'string' && obj.includes("http")) {
+      this.getFileFromUrl(obj).subscribe(data => {
+        this.value = data;
+        this._onChange(obj)
+        this.empty = obj === null;
+        this.fileName = data.name;
+      });
+    } else if (typeof obj === 'object' && obj !== null) {
+      this._value = obj;
+      this.fileName = obj.name;
+      this._onChange(obj)
+      this.empty = obj === null;
+    }
 
-    this._onChange(obj)
-    this.empty = obj === null;
   }
 
   clear(): void {

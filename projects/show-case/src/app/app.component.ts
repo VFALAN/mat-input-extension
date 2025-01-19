@@ -27,12 +27,14 @@ export class AppComponent {
   title = 'showCase';
   formBuilder = inject(FormBuilder)
   form: FormGroup;
+  private sourceFileUrl = "https://resize.latenode.com/cdn-cgi/image/width=960,format=auto,fit=scale-down/https://cdn.prod.website-files.com/62c40e4513da320b60f32941/65f1caf8c7b1b478c4477585_%D1%8B-p-800.png"
 
   constructor() {
     this.form = this.formBuilder.group({
       file: [null, [Validators.required]],
       number: [null, [Validators.required]],
       picture: [null, [Validators.required]],
+      picturePreLoad: [this.sourceFileUrl, [Validators.required]],
     })
   }
 
