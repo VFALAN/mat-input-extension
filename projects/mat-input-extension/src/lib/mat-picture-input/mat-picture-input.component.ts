@@ -190,7 +190,7 @@ export class MatPictureInputComponent implements OnInit, ControlValueAccessor {
     const fileName = this.getFileName(url);
 
     return this.http.get(url, {responseType: 'blob'}).pipe(map((data: Blob) => {
-      return new File([data],fileName, {type: 'image/png'});
+      return new File([data], fileName, {type: 'image/png'});
     }))
 
   }
@@ -209,15 +209,15 @@ export class MatPictureInputComponent implements OnInit, ControlValueAccessor {
 
   openDialogPictureUI() {
     const dialogRef = this.dialog.open(PictureUiComponent);
-    dialogRef.afterClosed().subscribe(result => {
-      this.preViewData = result;
-      const byteCharacters = atob(result.split(',')[1]);
-      const byteNumbers = new Array(byteCharacters.length);
-      for (let i = 0; i < byteCharacters.length; i++) {
-        byteNumbers[i] = byteCharacters.charCodeAt(i);
-      }
-      const byteArray = new Uint8Array(byteNumbers);
-      const file = new File([byteArray], 'picture.png', {type: 'image/png'});
+    dialogRef.afterClosed().subscribe(file => {
+      // this.preViewData = result;
+      // const byteCharacters = atob(result.split(',')[1]);
+      // const byteNumbers = new Array(byteCharacters.length);
+      // for (let i = 0; i < byteCharacters.length; i++) {
+      //   byteNumbers[i] = byteCharacters.charCodeAt(i);
+      // }
+      // const byteArray = new Uint8Array(byteNumbers);
+      // const file = new File([byteArray], 'picture.png', {type: 'image/png'});
       this.fileName = file.name;
       this.writeValue(file);
     })
@@ -236,6 +236,7 @@ export class MatPictureInputComponent implements OnInit, ControlValueAccessor {
     let file: File;
     console.log(`the value written its : ${obj}`)
     if (typeof obj === 'string' && obj.includes("http")) {
+      this.preViewData = obj;
       this.getFileFromUrl(obj).subscribe(data => {
         this.value = data;
         this._onChange(obj)
@@ -258,7 +259,16 @@ export class MatPictureInputComponent implements OnInit, ControlValueAccessor {
   }
 
   preview(): void {
-    this.dialog.open(PicturePreViewComponent, {data: {dataPreview: this.preViewData}})
+    if (this.preViewData !== null && this.preViewData !== undefined && this.preViewData.includes("http")) {
+      this.dialog.open(PicturePreViewComponent, {data: {source: this.preViewData}})
+    } else {
+      const fileReader = new FileReader();
+      fileReader.onloadend = (e: Event) => {
+        this.dialog.open(PicturePreViewComponent, {data: {source: fileReader.result}});
+      }
+      fileReader.readAsDataURL(this.value as File);
+    }
+
   }
 
   download(): void {

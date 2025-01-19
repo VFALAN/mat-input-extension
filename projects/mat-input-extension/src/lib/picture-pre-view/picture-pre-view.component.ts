@@ -3,13 +3,13 @@ import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from "@angular/material/
 import {MatCardActions, MatCardModule} from "@angular/material/card";
 import {MatInputModule} from "@angular/material/input";
 import {MatIconModule} from "@angular/material/icon";
-import {MatIconButton} from "@angular/material/button";
+import {MatButton, MatIconButton} from "@angular/material/button";
 
 
 @Component({
   selector: 'picture-pre-view',
   standalone: true,
-  imports: [MatCardActions, MatCardModule, MatInputModule, MatDialogModule, MatIconModule, MatIconButton],
+  imports: [MatCardActions, MatCardModule, MatInputModule, MatDialogModule, MatIconModule, MatIconButton, MatButton],
   templateUrl: './picture-pre-view.component.html',
   styleUrl: './picture-pre-view.component.css'
 })
@@ -24,7 +24,7 @@ export class PicturePreViewComponent implements OnInit, OnDestroy {
 
   async loadImage() {
     console.log(this.data)
-    this.source = this.data.dataPreview;
+    this.source = this.data.source;
   }
 
   ngOnDestroy(): void {

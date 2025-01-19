@@ -106,11 +106,15 @@ export class PictureUiComponent implements OnInit, OnDestroy {
 
   save() {
     const data = this.canvas.nativeElement.toDataURL('image/png');
-    this.tempdata = data;
-    const blob = new Blob([data.replace(/^data:image\/\w+;base64,/, '')], {type: 'image/png'});
-    this.file = new File([blob], 'picture', {type: 'image/png'});
+    const byteCharacters = atob(data.split(",")[1]);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    const file = new File([byteArray], 'picture.png', {type: 'image/png'});
 
-    this.dialog.close(data);
+    this.dialog.close(file);
   }
 
   constructor(private readonly breakPointObserver: BreakpointObserver) {
