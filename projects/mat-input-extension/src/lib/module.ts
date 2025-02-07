@@ -42,7 +42,6 @@ import {provideHttpClient} from "@angular/common/http";
     MatIconButton,
     MatSuffix,
     CommonModule,
-    MatInputNumberComponent,
     MatPictureInputComponent
   ]
 })

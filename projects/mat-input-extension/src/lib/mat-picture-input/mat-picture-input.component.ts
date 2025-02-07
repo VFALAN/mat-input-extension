@@ -200,24 +200,9 @@ export class MatPictureInputComponent implements OnInit, ControlValueAccessor {
     return parts.length > 0 ? parts[parts.length - 1] : 'picture.png';
   }
 
-  // getPicture() {
-  //   if (this.value) {
-  //     return this.value;
-  //   } else {
-  //   }
-  // }
-
   openDialogPictureUI() {
     const dialogRef = this.dialog.open(PictureUiComponent);
     dialogRef.afterClosed().subscribe(file => {
-      // this.preViewData = result;
-      // const byteCharacters = atob(result.split(',')[1]);
-      // const byteNumbers = new Array(byteCharacters.length);
-      // for (let i = 0; i < byteCharacters.length; i++) {
-      //   byteNumbers[i] = byteCharacters.charCodeAt(i);
-      // }
-      // const byteArray = new Uint8Array(byteNumbers);
-      // const file = new File([byteArray], 'picture.png', {type: 'image/png'});
       this.fileName = file.name;
       this.writeValue(file);
     })

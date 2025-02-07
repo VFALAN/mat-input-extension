@@ -1,27 +1,67 @@
 # MatInputExtension
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.0.4.
+This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.0.
+and support angular material 17.x.x ^
+## mat-picture-input
+This component was design for take pictures in the most simple way in
+order to prevent dependency of another packages
+```html
+<mat-picture-input></mat-picture-input>
+```
+this component its compatible with  reactive forms
+```html
 
-## Development server
+<form [formGroup]="form">
+  <label for="">Picture</label>
+  <mat-picture-input formControlName="picture"></mat-picture-input>
+</form>
+```
+the only format supported is: image/jpg.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## options
+``` ts
+@Input()
+enabledPreview:boolean = false;
+@Input()
+enabledDownload:boolean = false;
+```
 
-## Code scaffolding
+in case to use any of those options be sure that the resource is reachable via http get
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## mat-input-file
+```html
+<mat-input-file></mat-input-file>
+```
 
-## Build
+this component it's compatible with reactive forms
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+```html
+<form [formGroup]="form">
+  <label >File</label>
+  <mat-input-file formControlName="file"></mat-input-file>
+</form>
+```
+be sure to define as null in blank case
+```ts
+import {FormBuilder, Validators} from "@angular/forms";
+form = FormBuilder.group({
+  file: [null, Validators.required]
+})
+```
+compatible with MatFormField
+```html
+<form [formGroup]="form">
+  <mat-form-field>
+    <mat-label>File</mat-label>
+    <mat-input-file formControlName="file"></mat-input-file>
+  </mat-form-field>
+</form>
+```
 
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## output
+returns File native object
+```ts
+() => {
+  const file: File = this.form.controls['file'].value;
+}
+```

@@ -11,7 +11,7 @@ export class SuffixInputButtonDirective implements OnInit {
   ngOnInit(): void {
     this.render.setStyle(this.el.nativeElement, 'position', 'absolute');
     this.render.setStyle(this.el.nativeElement, 'top', '50%');
-    this.render.setStyle(this.el.nativeElement, 'right', '10%');
+    this.render.setStyle(this.el.nativeElement, 'right', '1%');
     this.render.setStyle(this.el.nativeElement, 'transform', 'translateY(-50%)');
     this.el.nativeElement.querySelectorAll('button').forEach((button: { nativeElement: any; }) => {
       if (button !== undefined) {
