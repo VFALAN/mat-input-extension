@@ -22,7 +22,7 @@ import {Subject} from "rxjs";
            matInput
     >
 
-    <div class="button-container">
+    <div suffix-button-container>
       @if (_value?.name !== null) {
         <button class="suffix-button" mat-icon-button (click)="value=null;empty=true" matSuffix>
           <mat-icon>close</mat-icon>

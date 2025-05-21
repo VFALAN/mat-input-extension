@@ -1,29 +1,66 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<form action="" [formGroup]="form">
-  <mat-form-field>
-    <mat-label>File</mat-label>
-    <mat-input-file formControlName="file">
-    </mat-input-file>
-    @if (form.controls['file'].hasError('required')) {
-      <mat-error>
-        File Its Required
-      </mat-error>
-    }
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label>comparation</mat-label>
-    <mat-icon aria-hidden="false" matSuffix aria-label="Example home icon" fontIcon="home"></mat-icon>
-    <input type="text" matInput>
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label>number comparation</mat-label>
-    <input type="number" matInput>
-  </mat-form-field>
+<!--<form action="" [formGroup]="form">-->
+<!--  <mat-form-field>-->
+<!--    <mat-label>File</mat-label>-->
+<!--    <mat-input-file formControlName="file">-->
+<!--    </mat-input-file>-->
+<!--    @if (form.controls['file'].hasError('required')) {-->
+<!--      <mat-error>-->
+<!--        File Its Required-->
+<!--      </mat-error>-->
+<!--    }-->
+<!--  </mat-form-field>-->
+<!--  <mat-form-field>-->
+<!--    <mat-label>-->
+<!--      Picture-->
+<!--    </mat-label>-->
+<!--    <mat-picture-input [enabledPreview]="true" [enabledDownload]="true"formControlName="picture"></mat-picture-input>-->
+<!--  </mat-form-field>-->
+<!--  <mat-form-field>-->
+<!--    <mat-label>Pre Load File</mat-label>-->
+<!--    <mat-picture-input [enabledPreview]="true" [enabledDownload]="true"  formControlName="picturePreLoad"></mat-picture-input>-->
+<!--  </mat-form-field>-->
+<!--  <mat-form-field>-->
+<!--    <mat-label>comparation</mat-label>-->
+<!--    <mat-icon aria-hidden="false" matSuffix aria-label="Example home icon" fontIcon="home"></mat-icon>-->
+<!--    <input type="text" matInput>-->
+<!--  </mat-form-field>-->
 
-  <mat-input-number formControlName="number"></mat-input-number>
+
+<!--  <mat-form-field>-->
+<!--    <mat-label>number comparation</mat-label>-->
+<!--    <input type="number" matInput>-->
+<!--  </mat-form-field>-->
+
+<!--  &lt;!&ndash;  <mat-input-number formControlName="number"></mat-input-number>&ndash;&gt;-->
+
+<!--  <div>-->
+
+<!--  </div>-->
 
 
-  <button mat-raised-button color="primary" [disabled]="form.invalid"> Ok</button>
-  <button mat-raised-button color="accent" (click)="console.log(form.getRawValue())">Show</button>
+<!--  <button mat-raised-button color="primary" [disabled]="form.invalid"> Ok</button>-->
+<!--  <button mat-raised-button color="accent" (click)="console.log(form.getRawValue())">Show</button>-->
 
-</form>
+<!--</form>-->
+<div class="container">
+  <div class="form-container">
+    <form [formGroup]="form">
+      <div class="controls-container">
+        <div class="controls">
+          <mat-form-field>
+            <mat-label>File</mat-label>
+            <mat-input-file formControlName="file"></mat-input-file>
+          </mat-form-field>
+        </div>
+        <div class="controls">
+          <mat-form-field>
+            <mat-label>Picture</mat-label>
+            <mat-picture-input [enabledPreview]="true" [enabledDownload]="true" formControlName="picture"></mat-picture-input>
+          </mat-form-field>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>

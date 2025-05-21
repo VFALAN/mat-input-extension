@@ -1,0 +1,12 @@
+<mat-card-content>
+  @if (source !== undefined) {
+    <img class="pre-view-image" [src]="source" alt="preview">
+
+  }
+</mat-card-content>
+<mat-card-actions>
+  <button (click)="cancel()" mat-raised-button>
+    <mat-icon matPrefix>close</mat-icon>
+    close
+  </button>
+</mat-card-actions>
