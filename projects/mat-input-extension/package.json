@@ -1,6 +1,6 @@
 {
   "name": "mat-input-extension",
-  "version": "0.1.17",
+  "version": "1.17.2",
   "peerDependencies": {
     "@angular/common": "^18.2.0",
     "@angular/core": "^18.2.0"
